@@ -1,6 +1,3 @@
-Jiayu is sohaiiiii
-
-
 Alright, java is quite simple, but not very similar to Python here...
 Learn Java: https://docs.oracle.com/javase/tutorial/
 
