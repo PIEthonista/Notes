@@ -44,10 +44,10 @@ Some explained meanings:
 1. 'new' : It creates a new Java obj & allocates memory for it on the heap. //~!new
            Also used for array creation (array are also objects).
 2. 'super' : A reference variable that is used to refer parent class objects. //~!super
-             Can be used to call parent class' variables and methods.
+             Can be used to call parent class' variables and methods. i.e. super.method()
 3. 'super()' : A reference variable that is ONLY used to refer parent class constructors. //~!super()
 
-============================================================================================================================================ ~!MODIFIERS
+============================================================================================================================================ ~!ACCESS ~!MODIFIERS
 There are two groups of modifiers:
     - Access Modifiers: controls the access level
     - Non-Access Modifiers: do not control access level, but provides other functionality
@@ -65,7 +65,7 @@ For classes:
        + protected (Nested Classes +) : Code of inner class is accessible in the same package & subclasses.
 
 
-For attributes, methods and constructors:
+For attributes, methods and constructors: (p.o.d.i)
 
     public    : The code is accessible for all classes.
     private   : The code is only accessible within the declared class. (not even child class can access, use getter setter, see OOP tag_encapsulation)
@@ -137,7 +137,7 @@ class Second {
 
 static: Used with methods, variables (class variables/attributes), blocks({..}), Nested class.
 
-It mainly deals with the memory location management. Say a 'static' class method, it call be
+It mainly deals with the memory location management. Say a 'static' class method, it can be
 directly called with the class without initialising the object. (i.e. Math.pow(x,y))
 This is because the method/attribute/block has the same memory location as the class, they're
 directly linked to the class. The static variable gets memory only once in the class area at the
@@ -153,9 +153,10 @@ PS: Anything 'static' in java will have a memory location, BUT JUST ONE, WITH EV
 
 NOTE: MAIN POWERS OF 'STATIC'
     - can be called without obj creation, since in the storage memory, they're bound to classes instead of obj.
+    - There only exist ONE copy of the static variable for all objects (can be used to communicated between obj of same class)
 NOTE: MAIN RESTRICTIONS OF 'STATIC'
     - Static methods can not use non-static data member or call non-static method directly. (must go through a bridge.)
-    - 'this' and 'super' cannot be used in static context.
+    - 'this' and 'super' cannot be used in static context. ('this' & 'super' refers to objects)
 
 #ref: static - memory location.png
 
@@ -189,7 +190,7 @@ NOTE: MAIN RESTRICTIONS OF 'STATIC'
 2. STATIC METHODS
     There are two main restrictions for the static method. They are:
         - The static method can not use non-static data member or call non-static method directly. (must go through a bridge.)
-        - 'this' and 'super' cannot be used in static context. ??
+        - 'this' and 'super' cannot be used in static context.
 
 
 3. STATIC ~!BLOCKS
@@ -282,11 +283,15 @@ final double Pi = 3.142;     // Constants: Unchangable values once assigned. Thr
 
 NOTE: var name = AnyDataTypeValue; (makes it easy: do not have to pre-declare data type, data type is initialised by type of value assigned)
                                    (can also be used for containing inputted values, but only of the same data type, old value will be overridden.)
+                                   NOTE: value must be assigned immediately.
+                                   []    var n = 100;  // good code
+                                   []    var n;        // throws error
+                                   []    n=100;
 
 The main difference between ~!primitive and ~!non-primitive data types are:
 	- Primitive types are predefined (already defined) in Java. Non-primitive types are created by the programmer and
 	  is not defined by Java (except for String).
-    - Primitive data types are like data values (requires wrapper class to be an obj), Non-Primitive data types are actually objs.
+    - Primitive data types are like data values (NOTE: requires wrapper class to be an obj), Non-Primitive data types are actually objs.
 	- Non-primitive types can be used to call methods to perform certain operations, while primitive types cannot.
 	- A primitive type has always a value, while non-primitive types can be null.
 	- A primitive type starts with a lowercase letter, while non-primitive types starts with an uppercase letter,
@@ -304,7 +309,7 @@ Type casting is when you assign a value of one primitive data type to another ty
 In Java, there are two types of casting:
 
 	1. Widening Casting (automatically) - converting a smaller type to a larger type size
-	  byte -> short -> char -> int -> long -> float -> double
+	  byte -> short -> char -> int -> long -> float -> double  (BS CILF D)
 
 	  []  int myInt = 9;
       []  double myDouble = myInt; // Automatic casting: int to double 9.0
@@ -403,8 +408,8 @@ Logical       ||   OR i.e. (9==3||3!=9): (false||true): true
 Bitwise??
 
 === Postfix Operator ===
-n++ Uses the original method, only incrememts by 1 in the next call
-n-- Uses the original method, only decrements by 1 in the next call
+n++ Current n++ call uses the original value, only incrememts by 1 in the next call of n
+n-- Current n-- call uses the original value, only decrements by 1 in the next call of n
 
 === Unary Operator ===
 ++n Increments the number & uses it
@@ -412,21 +417,63 @@ n-- Uses the original method, only decrements by 1 in the next call
 
 []    int n1 = 3;
 []    int n2 = n1++;
-[]    System.out.println(n2)
+[]    System.out.println(n2);
+[]    System.out.println(n1);
 []    >>> 3
+[]    >>> 4
 
 
 ~!Math Methods (i.e. Math.max(x,y))
 Ref: https://www.w3schools.com/java/java_ref_math.asp
+NOTE: optional import java.lang.Math;
+               import static java.lang.Math;
+see tag_staticimport
+
+
+=== Operator Precedence ===
+Operators	                                Precedence
+postfix increment and decrement	            ++ --
+prefix increment and decrement, and unary	++ -- + - ~ !
+multiplicative	                            * / %
+additive	                                + -
+shift	                                    << >> >>>
+relational	                                < > <= >= instanceof
+equality	                                == !=
+bitwise AND	                                &
+bitwise exclusive OR	                    ^
+bitwise inclusive OR	                    |
+logical AND	                                &&
+logical OR	                                ||
+ternary	                                    ? :
+assignment	                                = += -= *= /= %= &= ^= |= <<= >>= >>>=
 
 
 ============================================================================================================================================ ~!STRING
 // ~!str
+--- Basic ---
+str.length()
+str.equals(str2)      # DO NOT use == when comparing strings
+str.equalsIgnoreCase(str2)
+
+[]    Fact about '==' vs '.equals()' :
+[]        String is not a primitive data type in Java. It requires object creation.
+[]        The '==' operator compares the objects' address.
+[]        The '.equals()' method compares the objects' content value.
+[]        In simple words, == checks if both objects point to the same memory location
+[]        whereas .equals() evaluates to the comparison of values in the objects.
+[]        To produce consistent results, it is highly recommended to use the '.equals()' method.
+
+str1.compareTo(str2)              #Lexicographic ordering used to order alphabet according to ASCII ordering
+str1.compareToIgnoreCase(str2)
+                      Return -val if str1 comes b4 str2
+                      Return +val if str2 comes b4 str1
+                      Return 0 if str1 == str2
+str.charAt(ind)
 
 --- String Slicing ---
 str.substring(int BeginInd, int EndInd);
 Begin Index : Inclusive
-End Index : Exclusive
+End Index : Exclusive     (If not specified, selects all from BeginInd to end)
 returns specified substring.
 
 []    String str = "Welcome to geeksforgeeks";
@@ -434,6 +481,10 @@ returns specified substring.
 []    System.out.println(str.substring(11,16));    <--from 11 to 15
 []    >>> geeksforgeeks
 []    >>> geeks
+
+[]    String input = "1,2,3,4,5";
+[]    String [] arr = input.split(",");
+[]    // {"1", "2", "3", "4", "5"}
 
 --- Obj To String ---
 obj.toString();
@@ -443,13 +494,24 @@ this method.
 []    Integer myInt = 100;                  // wrapper class objs
 []    String myString = myInt.toString();   // string value "100"
 
+--- String to Num ---
+[]    String str = "25";
+[]    try{
+[]        int number = Integer.parseInt(str);
+[]        double dou = Double.parseDouble(str);
+[]        System.out.println(number); // output = 25
+[]    }
+[]    catch (NumberFormatException e){
+[]        e.printStackTrace();
+[]    }
+
 --- A Few Useful Methods ---
 String name = "    Bro   ";
 boolean re = name.equals("Bro");                  >>> false
 boolean re = name.equalsIgnoreCase("    bro   "); >>> true
     int re = name.length();                       >>> 10
    char re = name.charAt(4);                      >>> B
-    int re = name.indexOf("o");                   >>> 6
+    int re = name.indexOf("ro", 3);               >>> 6        <--Returns starting position of specified str, search starting from 3.
 boolean re = name.isEmpty();                      >>> false
  String re = name.toUpperCase();
  String re = name.toLowerCase();
@@ -458,6 +520,15 @@ boolean re = name.isEmpty();                      >>> false
 
 More String Methods: https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html
                      https://www.w3schools.com/java/java_ref_string.asp
+
+
+============================================================================================================================================ ~!CHARACTER
+
+char x = str.charAt(index_pos);
+boolean b2 = Character.isLowerCase(ch2);
+boolean b1 = Character.isUpperCase(ch1);
+             ^^^^^^^^^             ^^^
+             Wrapper Cls           char
 
 ============================================================================================================================================ ~!OUTPUT
 // ~!print() ~!println()
@@ -472,11 +543,13 @@ System.out.println("text");     prints text and adds a newline char "\n" after t
 
 *both print functions can be used in input statements
 	i.e.
-    []	System.out.print("Enter num1: ");
+    []	System.out.print("Enter num(s): ");
     []	int num1 = in.nextInt();
+    []  int num2 = in.nextInt();
+    []  int num3 = in.nextInt();
     []	....
     []	Result:
-    []		Enter num1: <10>
+    []		Enter num1: 10 11 12
 
 	i.e.
     []	System.out.println("Enter num1: ");
@@ -507,7 +580,7 @@ System.out.printf("format string", obj/var/val)
                       1234567890
 
     [precision] &.2f
-    sets nmber of digits of precision when outputting floating-point values
+    sets number of digits of precision when outputting floating-point values
     i.e. %.2f  3.14
     i.e. %.3f  3.142
 
@@ -519,6 +592,8 @@ System.out.printf("format string", obj/var/val)
     %f fixed-point floating point
     %g general floating point
     %e E-notation float (1.08e-10)
+    %% '%' character
+
 
 
 i.e. System.out.printf("The current value of APL is %+,030.5f \n NEWLINE", 3142536.45856428329478237);
@@ -528,13 +603,13 @@ i.e. System.out.printf("The current value of APL is %+,030.5f \n NEWLINE", 31425
                                                      ||Flag: zero-padding
                                                      |Flag: , separator
                                                      Flag: +/- for +/- values
->>> The current value of APL is +000000000000003,142,536.45856 \\
+>>> The current value of APL is +000000000000003,142,536.45856 \\end
 >>>  NEWLINE
                                 123456789012345678901234567890
                                          ^         ^         ^
 
 i.e. System.out.printf("The current value of APL is %+,-30.5f", 3142536.45856428329478237);
->>> The current value of APL is +3,142,536.45856              \\
+>>> The current value of APL is +3,142,536.45856              \\end
                                 123456789012345678901234567890
                                          ^         ^         ^
 
@@ -554,7 +629,7 @@ More on formatting: https://docs.oracle.com/javase/tutorial/java/data/numberform
 [] 	    public static void main(String[] args) {
 []   	        Scanner <input_object> = new Scanner(System.in);  <-- create instance of input object
 []
-[]   	    	//(can be used for multiple input statements. reason: an object can hold multuple data,
+[]   	    	//(can be used for multiple input statements. reason: an object can hold multiple data,
 []   	    	// methods and attributes)
 []
 []     	  	System.out.print/println("Enter.....");
@@ -587,11 +662,42 @@ Floating-Point:  float      <in>.nextFloat();
 Non primitive:   String     <in>.nextLine();  reads whole line i.e. "rfc arfc werf erfc",
                                               also read NUMS. (Treats 'Enter' as '\n')
 
-[]    System.out.pritn("Enter num: ");
+[]    System.out.print("Enter num: ");
 []    int n = in.nextInt();              <-- when you press 'enter' after typing the num,
-[]    in.nextLine();                     <-- the 'enter' or '\n' goes here (remove enetr buffer)
+[]    in.nextLine();                     <-- the 'enter' or '\n' goes here (remove enter buffer)
 []    System.out.println("Enter name: ");
 []    String name = in.nextLine();
+
+[]    System.out.print("Enter num(s): ");   <-- multiple values entered in one line
+[]    int num1 = in.nextInt();
+[]    int num2 = in.nextInt();
+[]    int num3 = in.nextInt();
+[]    ....
+[]    >>> Enter num1: 10 11 12
+
+
+    === data.txt ===
+    line 1 text
+    line 2 text
+    3
+    4
+    5           <-- invisible \n char here
+    line 5 text
+    line 6 text
+    7
+    8
+    9           <-- invisible \n char here
+
+[]    while(in.hasNextLine()){
+[]        System.out.println(in.nextLine());
+[]        System.out.println(in.nextLine());
+[]        System.out.println(in.nextInt());
+[]        System.out.println(in.nextInt());
+[]        System.out.println(in.nextInt());
+[]        in.nextLine();
+[]        System.out.println("===============");
+
+
 
 
 
@@ -605,7 +711,7 @@ NOTE: Another method of input is by not using Scanner, but treating main() as a 
 
 
 ============================================================================================================================================ ~!IF / WHILE / DO / FOR / FOR-EACH
-// ~!if ~!else ~!while ~!do ~!for ~!foreach
+// ~!if ~!else ~!while ~!do ~!dowhile ~!for ~!foreach ~!labels ~!loops
 
 1. IF / ELSE IF /ELSE
 	[]	if (condition1) {
@@ -651,7 +757,7 @@ NOTE: Another method of input is by not using Scanner, but treating main() as a 
 	[]	}
 
 	Statement 1 is executed (one time) before the execution of the code block.
-	Statement 2 defines the condition for executing the code block.
+	Statement 2 defines the condition for executing the code block. NOTE:can be empty for infinite loop i.e. for(int i=0; ; i++)
 	Statement 3 is executed (every time) after the code block has been executed.
 
 	i.e.
@@ -682,6 +788,27 @@ NOTE: Another method of input is by not using Scanner, but treating main() as a 
     []  for (int[] i : num) {
     []      for (int j : i){
     []          System.out.println(j);
+
+6.  LABELS
+    You can assign a label to the break/continue statement and can use that label with the break/continue statement.
+    NOTE: breaks/continues labeled loops. FOR-Loops ONLY.
+    []    lbl:
+    []    for (int i=0; i<4; i++){
+    []        for (int j=0; j<5; j++){
+    []            if (j==2){
+    []                continue lbl;}
+    []            System.out.println(i + " " + j);
+    []        }
+    []    }
+    []    >>> 0 0
+    []    ... 0 1
+    []    ... 1 0
+    []    ... 1 1
+    []    ... 2 0
+    []    ... 2 1
+    []    ... 3 0
+    []    ... 3 1
+
 
 
 ============================================================================================================================================ ~!SHORT HAND IF / TERNARY OPERATOR
@@ -746,8 +873,9 @@ This is how it works:  The switch expression is evaluated once.
 []	  case 7:
 []	    System.out.println("Today is Sunday");
 []	    break;
-[]    case 8: case 9:
+[]    case 8: case 9:                             <-- NOTE: optional multiple cases
 []      System.out.println("How high are you?");
+[]      break;
 []	  default:
 []	    System.out.println("Looking forward to the Weekend");
 []	}
@@ -784,12 +912,23 @@ Declaration & Assignment
 []  dataType [] arrayName = { elem1, elem2, ... };
              ^ Array Dimension Declaration
 
+
+Default Value when Created through size declaration:
+Boolean: false
+String: Null
+Integer: 0
+
+
 i.e.
 []  String [] ar1 = {"John", "Bob", "Casey"};
 
 ---------------------------------------------------------ACCESS & EDIT
 Access: arrayName[index]
 Edit  : arrayName[index] = newValue;
+
+String input = "1,2,3,4,5";
+String [] arr = input.split(",");
+// {"1", "2", "3", "4", "5"}
 
 ---------------------------------------------------------LOOP
 []	for (int i=0; i<ar1.length; i++) {
@@ -802,6 +941,17 @@ or
 []	  System.out.println(i);
 []	}
 #ref: for-each loop
+
+---------------------------------------------------------CLONE (OBJECT)
+int [] arr1 = {1,2,3};
+int [] arr2 = arr1;         <-- refers to same object/changes done to arr2 will affect arr1
+int [] arr3 = arr1.clone(); <-- cloned new object
+arr2[1]=100;
+//print
+// arr1 = {1, 100, 3}
+// arr2 = {1, 100, 3}
+// arr3 = {1, 2, 3}
+
 
 ---------------------------------------------------------STORING OBJECTS
 
@@ -816,6 +966,7 @@ refrigerator[0] = obj1;
 i.e.
 2-Dim Array: int[][] myNums = { {1,2,3,4}, {5,6,7} };
              int[][] myNums = [outerDim][innerDim];
+                              [row][col]
 
 ---------------------------------------------------------ACCESS
 myNums[index1][index2]
@@ -909,6 +1060,17 @@ classes. NOTE: for String objs, sorts numerical before alphabetical.
 []        }
 []    }
 []    >>> [BMW, Ford, Mazda, Volvo]
+
+
+
+
+================================================================================ ~!MULTI-DIMENSIONAL ARRAYLIST
+[]    ArrayList<ArrayList<String>> twodim = new ArrayList<ArrayList<String>>();
+[]    ArrayList<String> o1 = new ArrayList<String>();
+[]    twodim.add(o1);
+[]    o1.add("one");
+[]    System.out.println(twodim.get(0).get(0));
+[]    >>> one
 
 
 
@@ -1334,6 +1496,18 @@ Option: The 'John.java' and other source codes of the package can also be in the
 Built-in Java Packages: https://docs.oracle.com/en/java/javase/13/docs/api/allpackages-index.html
 
 
+=== STATIC IMPORT === // ~!staticimport
+Static import means that the fields and methods in a class can be used in the code without specifying their class if they
+are defined as public static.
+
+[]    import static java.lang.Math.sqrt;        <-- static import
+[]    public class Demo {
+[]        public static void main(String[] arg) {
+[]            double num = 36.0;
+[]            System.out.println("The square root of the above number is: " + sqrt(num));   <-- method call without class
+[]        }
+[]    }
+
 
 
 ============================================================================================================================================ ~!RANDOM
@@ -1354,17 +1528,23 @@ public class Main{
     }
 }
 
+int i = r.nextInt(1001);      0-1000
+int i = r.nextLine(71) + 30;  30-100
+
+// to get a double between -1 and 1
+double i = r.nextDouble()*2 - 1; // rng.nextDouble() is between 0 and 1
+
 
 
 ============================================================================================================================================ ~!DATETIME
 // ~!date ~!time
 
 []    import:
-[]    java.time.LocalDate;	        Represents a date (year, month, day (yyyy-MM-dd))
-[]    java.time.LocalTime;	        Represents a time (hour, minute, second and nanoseconds (HH-mm-ss-ns))
-[]    java.time.LocalDateTime;	    Represents both a date and a time (yyyy-MM-dd-HH-mm-ss-ns)
-[]    java.time.DateTimeFormatter;	Formatter for displaying and parsing date-time objects
-[]                                  //lol just import java.time.*;
+[]    java.time.LocalDate;	         Represents a date (year, month, day (yyyy-MM-dd))
+[]    java.time.LocalTime;	         Represents a time (hour, minute, second and nanoseconds (HH-mm-ss-ns))
+[]    java.time.LocalDateTime;	         Represents both a date and a time (yyyy-MM-dd-HH-mm-ss-ns)
+[]    java.time.format.DateTimeFormatter;	 Formatter for displaying and parsing date-time objects
+[]                                         //lol just import java.time.*;
 []
 []    public class Main {
 []        public static void main(String[] args) {
@@ -1374,7 +1554,7 @@ public class Main{
 []            LocalTime TimeObj = LocalTime.now();      //  HH-mm-ss-ns
 []            System.out.println(TimeObj);              >>> 18:30:20.854410
 []
-[]            LocalDateTime DateTimeObj = LocalDateTiem.now();    //  yyyy-MM-dd HH-mm-ss-ns ('T' is just to seperate date from time)
+[]            LocalDateTime DateTimeObj = LocalDateTime.now();    //  yyyy-MM-dd HH-mm-ss-ns ('T' is just to seperate date from time)
 []            System.out.println(DateTimeObj);                    >>> 2021-10-06T18:30:20.854878
 []
 []
@@ -1839,6 +2019,10 @@ whether you need to read bytes or characters, and the size of the file/lines etc
 []    File       : Create, Read, GetInfo, Delete
 []    FileWriter : Write
 
+File types: .txt (ASCII Encoding)  .dat (Binary Encoded)
+Terminology: Input Stream (Data flows into program)
+             Output Stream (Data flows out of program)
+
 The File class from the java.io package, allows us to work with files. To use the File class,
 create an object of the class, and specify the filename or directory name:
 
@@ -1851,6 +2035,17 @@ create an object of the class, and specify the filename or directory name:
 []    File myObj = new File("/path/filename.txt");   // Mac & Linux
 []    File myObj = new File("C:\\Users\\MyName\\filename.txt");  // Windows with '\' escaped
 
+ALTERNATIVES
+[]    import java.util.Scanner;                // Scanner as reader
+[]    import java.io.BufferedReader;           // alternative reader
+[]    import java.io.FileReader;               // alternative reader
+[]    import java.io.PrintWriter;
+[]    import java.io.FileInputStream;
+[]    import java.io.FileOutputStream;
+[]    import java.io.FileNotFoundException;
+[]    import java.io.IOException;
+...
+
 
 'File'Method        Return   Description
 ------------------------------------------------------------------------
@@ -1860,7 +2055,7 @@ createNewFile()     Boolean  Creates an empty file
 delete()            Boolean  Deletes a file
 exists()            Boolean  Tests whether the file exists
 getName()           String   Returns the name of the file
-getAbsolutePath()   String   Returns the absolute pathname of the file
+getAbsolutePath()   String   Returns the absolute (full) pathname of the file ("./abstract_Path")
 length()            Long     Returns the size of the file in bytes
 list()              String[] Returns an array of the files in the directory
 mkdir()             Boolean  Creates a directory
@@ -1882,126 +2077,211 @@ FileWriter(String fileName, boolean append) AppendTrue: append instead of re-wri
 
 
 
-=== Create File ===
-[]    import java.io.File;                            // Import the File class
-[]    import java.io.IOException;
-[]    public class CreateFile {
-[]      public static void main(String[] args) {
-[]        try {
-[]          File myObj = new File("filename.txt");                     // create File obj
-[]          if (myObj.createNewFile()) {                               // creates file + return boolean
-[]            System.out.println("File created: " + myObj.getName());
-[]          } else {
-[]            System.out.println("File already exists.");
-[]          }
-[]        } catch (IOException e) {
-[]          System.out.println("An error occurred.");
-[]          e.printStackTrace();
-[]        }
-[]      }
-[]    }
-[]    >>> File created: filename.txt
+
+1.  === Create File ===
+    []    import java.io.File;                            // Import the File class
+    []    import java.io.IOException;
+    []    ...
+    []        try {
+    []          File myObj = new File("filename.txt");                     // create File obj
+    []          if (myObj.createNewFile()) {                               // creates file + return boolean
+    []            System.out.println("File created: " + myObj.getName());
+    []          } else {
+    []            System.out.println("File already exists.");
+    []          }
+    []        } catch (IOException e) {
+    []          System.out.println("An error occurred.");
+    []          e.printStackTrace();
+    []        }
+    []    >>> File created: filename.txt
 
 
 
-=== Write File ===
-[]    import java.io.FileWriter;                      // Import the FileWriter class
-[]    import java.io.IOException;
-[]    public class WriteToFile {
-[]      public static void main(String[] args) {
-[]        try {
-[]          FileWriter myWriter = new FileWriter("filename.txt");                     // create FileWriter obj
-[]          myWriter.write("Files in Java might be tricky, but it is fun enough!");   // write
-[]          myWriter.close();                                                         // close
-[]          System.out.println("Successfully wrote to the file.");
-[]        } catch (IOException e) {
-[]          System.out.println("An error occurred.");
-[]          e.printStackTrace();
-[]        }
-[]      }
-[]    }
-[]    >>> Successfully wrote to the file.
+2.  === Write File === (FileWriter) (.txt)
+    []    import java.io.FileWriter;                      // Import the FileWriter class
+    []    import java.io.IOException;
+    []    ...
+    []        try {
+    []          FileWriter out = new FileWriter("filename.txt");                     // create FileWriter obj
+    []          out.write("Files in Java might be tricky, but it is fun enough!");   // write
+    []          out.close();                                                         // close
+    []          System.out.println("Successfully wrote to the file.");
+    []        } catch (IOException e) {
+    []          System.out.println("An error occurred.");
+    []          e.printStackTrace();
+    []        }
+    []    >>> Successfully wrote to the file.
+
+
+    === Write File === (PrintWriter) (.txt)
+    []    import java.io.PrintWriter;
+    []    import java.io.FileOutputStream;
+    []    import java.io.IOException;
+    []    ...
+    []        try{
+    []            PrintWriter out = new PrintWriter(new FileOutputStream("filename.txt"));         // overwrite
+    []            PrintWriter out = new PrintWriter(new FileOutputStream("filename.txt", true));   // append
+    []            ... out.print(), out.println(), out.printf() can be used to write data to file
+    []            out.close();
+    []        } catch (IOException e){
+    []            System.out.println("Problem with file output");
+    []        }
+
+
+    === Write File === (Binary File .dat)
+    []    import java.io.IOException;
+    []    import java.io.ObjectOutputStream;
+    []    import java.io.FileOutputStream;
+    []    ...
+    []        try{
+    []            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("filename.dat"));
+    []            out.writeInt(6);
+    []            out.writeDouble(3.142);
+    []            out.writeChar('a');
+    []            out.writeBoolean(true);
+    []            out.writeUTF("String");
+    []            out.close();
+    []        } catch (IOException e){
+    []            System.out.println("Problem with file output");
+    []        }
 
 
 
-=== Read File ===
-[]    import java.io.File;                      // Import the File class
-[]    import java.io.FileNotFoundException;     // Import this class to handle errors
-[]    import java.util.Scanner;                 // Import the Scanner class to read text files
-[]    public class ReadFile {
-[]      public static void main(String[] args) {
-[]        try {
-[]          File myObj = new File("filename.txt");  // create File obj
-[]          Scanner myReader = new Scanner(myObj);  // create Scanner obj (pass in File obj: Scanner(File source); )
-[]          while (myReader.hasNextLine()) {        // check for nextLine
-[]            String data = myReader.nextLine();    // read
-[]            System.out.println(data);
-[]          }
-[]          myReader.close();                       // close
-[]        } catch (FileNotFoundException e) {
-[]          System.out.println("An error occurred.");
-[]          e.printStackTrace();
-[]        }
-[]      }
-[]    }
-[]    >>> Files in Java might be tricky, but it is fun enough!
+3.  === Read File === (Scanner & File) (.txt)
+    []    import java.io.File;                      // Import the File class
+    []    import java.io.FileNotFoundException;     // Import this class to handle errors
+    []    import java.util.Scanner;                 // Import the Scanner class to read text files
+    []    ...
+    []        try {
+    []          Scanner in = new Scanner(new File("filename.txt"));    // create Scanner obj (pass in File obj)
+    []          while (in.hasNextLine()) {                             // check for nextLine
+    []            String data = in.nextLine();                         // read
+    []            System.out.println(data);
+    []          }
+    []          in.close();                             // close
+    []        } catch (FileNotFoundException e) {
+    []          System.out.println("An error occurred.");
+    []          e.printStackTrace();
+    []        }
+    []    >>> Files in Java might be tricky, but it is fun enough!
+
+
+    === Read File === (Scanner & FileInputStream) (.txt)
+    []    import java.io.FileInputStream;
+    []    import java.io.FileNotFoundException;
+    []    import java.util.Scanner;
+    []    ...
+    []        try{
+    []            Scanner in = new Scanner(new FileInputStream("filename.txt"));
+    []            ... // same as above nextLine nextInt nextDouble ...
+    []            in.close();
+    []        } catch (FileNotFoundException e) {
+    []            System.out.println("File was not found");
+    []        }
+
+
+    === Read File === (BufferedReader & FileReader) (.txt)
+    []    import java.io.BufferedReader;
+    []    import java.io.FileReader;
+    []    import java.io.FileNotFoundException;
+    []    import java.io.IOException;
+    []    ...
+    []        try{
+    []            BufferedReader in = new BufferedReader(new FileReader("filename.txt"));
+    []            String data;
+    []            while((data=in.readLine()) != null){        // detect end of file
+    []                System.out.println(data);
+    []                //  String s = in.readLine();
+    []                //  String s = in.read();
+    []            }
+    []            in.close();
+    []        } catch (FileNotFoundException e){
+    []            System.out.println("File was not found");
+    []        } catch (IOException e){
+    []        System.out.println("Error reading from file");
+    []        }
+
+
+    === Read File === (Binary File .dat)
+    []    import java.io.IOException;
+    []    import java.io.FileNotFoundException;
+    []    import java.io.ObjectInputStream;
+    []    import java.io.FileInputStream;
+    []    ...
+    []        try{
+    []            ObjectInputStream in = new ObjectInputStream(new FileInputStream("filename.dat"));
+    []            try{
+    []                while(true){
+    []                    num = in.readInt();
+    []                    dou = in.readDouble();
+    []                    cha = in.readChar();
+    []                    boo = in.readBoolean();
+    []                    str = in.readUTF();
+    []                }
+    []            } catch(EOFException e) {}     // End Of File Exception
+    []            in.close();
+    []        } catch (FileNotFoundException e){
+    []            System.out.println("File was not found");
+    []        } catch (IOException e){
+    []            System.out.println("Problem with file input");
+    []        }
 
 
 
-=== Get File Info ===
-[]    import java.io.File;                            // Import the File class
-[]    public class GetFileInfo {
-[]      public static void main(String[] args) {
-[]        File myObj = new File("filename.txt");
-[]        if (myObj.exists()) {
-[]          System.out.println("File name: " + myObj.getName());                 // get Name
-[]          System.out.println("Absolute path: " + myObj.getAbsolutePath());     // get AbsolutePath
-[]          System.out.println("Writeable: " + myObj.canWrite());                // check writability
-[]          System.out.println("Readable " + myObj.canRead());                   // check readability
-[]          System.out.println("File size in bytes " + myObj.length());          // check byte length
-[]        } else {
-[]          System.out.println("The file does not exist.");
-[]        }
-[]      }
-[]    }
-[]    >>> File name: filename.txt
-[]    >>> Absolute path: C:\Users\MyName\filename.txt
-[]    >>> Writeable: true
-[]    >>> File size in bytes: 0
+4.  === Get File Info ===
+    []    import java.io.File;                            // Import the File class
+    []    public class GetFileInfo {
+    []      public static void main(String[] args) {
+    []        File myObj = new File("filename.txt");
+    []        if (myObj.exists()) {
+    []          myObj.renameTo("data.txt");
+    []          System.out.println("File name: " + myObj.getName());                 // get Name
+    []          System.out.println("Absolute path: " + myObj.getAbsolutePath());     // get AbsolutePath
+    []          System.out.println("Writeable: " + myObj.canWrite());                // check writability
+    []          System.out.println("Readable " + myObj.canRead());                   // check readability
+    []          System.out.println("File size in bytes " + myObj.length());          // check byte length
+    []        } else {
+    []          System.out.println("The file does not exist.");
+    []        }
+    []      }
+    []    }
+    []    >>> File name: filename.txt
+    []    >>> Absolute path: C:\Users\MyName\filename.txt
+    []    >>> Writeable: true
+    []    >>> File size in bytes: 0
 
 
 
-=== Delete File ===
-[]    import java.io.File;  // Import the File class
-[]    public class DeleteFileFolder {
-[]      public static void main(String[] args) {
-[]        File myObj = new File("filename.txt");
-[]        if (myObj.delete()) {
-[]          System.out.println("Deleted the file: " + myObj.getName());
-[]        } else {
-[]          System.out.println("Failed to delete the file.");
-[]        }
-[]      }
-[]    }
-[]    >>> Deleted the file: filename.txt
+5.  === Delete File ===
+    []    import java.io.File;  // Import the File class
+    []    public class DeleteFileFolder {
+    []      public static void main(String[] args) {
+    []        File myObj = new File("filename.txt");
+    []        if (myObj.delete()) {
+    []          System.out.println("Deleted the file: " + myObj.getName());
+    []        } else {
+    []          System.out.println("Failed to delete the file.");
+    []        }
+    []      }
+    []    }
+    []    >>> Deleted the file: filename.txt
 
 
 
-=== Delete Folder ===
-NOTE: Last elem in directory must be a folder, not file.
-[]    import java.io.File;
-[]    public class DeleteFolder {
-[]      public static void main(String[] args) {
-[]        File myObj = new File("C:\\Users\\MyName\\Test");
-[]        if (myObj.delete()) {
-[]          System.out.println("Deleted the folder: " + myObj.getName());
-[]        } else {
-[]          System.out.println("Failed to delete the folder.");
-[]        }
-[]      }
-[]    }
-[]    >>> Deleted the folder: Test
-
+6.  === Delete Folder ===
+    NOTE: Last elem in directory must be a folder, not file.
+    []    import java.io.File;
+    []    public class DeleteFolder {
+    []      public static void main(String[] args) {
+    []        File myObj = new File("C:\\Users\\MyName\\Test");
+    []        if (myObj.delete()) {
+    []          System.out.println("Deleted the folder: " + myObj.getName());
+    []        } else {
+    []          System.out.println("Failed to delete the folder.");
+    []        }
+    []      }
+    []    }
+    []    >>> Deleted the folder: Test
 
 
 
@@ -2150,6 +2430,37 @@ that they are located at the same directory. (i.e. 'Main.java' 'Second.java')
 See more at: tag_packages
 
 
+
+
+============================================================================================================================================ ~!CLASS METHODS
+
+In java, the class definition usually contains the '.equals()', '.toString()' & 'getClass()' method.
+
+'.equals()' returns true if both objects are equal.
+ref: https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html#equals(java.lang.Object)
+
+=== equals() ===
+[]    public boolean equals(Person p){
+[]        if(name.equals(p.getName()))
+[]            return true;
+[]        else
+[]            return false;
+[]    }
+
+=== ~!getClass() ===
+[]    if (obj1.getClass() == obj2.getClass()){
+[]        System.out.println("Both the objects are of the same class.");
+[]    } 
+[]    NOTE: only applicable for objects of the same class / inherited class, else throws error (hint: use try catch)
+
+=== ~!instanceof === Operator
+[]    if (obj1 instanceof ClassName){
+[]        System.out.println("The object is one of the type of any descendent class of ClassName.");
+[]    } 
+[]    #By other words, obj1 belongs to a class that is a descendant class (child) of class ClassName.
+[]    NOTE: only applicable for objects of the same class / inherited class, else throws error (hint: use try catch)
+
+
 ============================================================================================================================================ ~!CONSTRUCTORS /OOP
 // OOP ~!init() ~!__init__()
 
@@ -2177,6 +2488,34 @@ NOTE: Initializer blocks run before constructors. See tag_blocks
 []        }
 []    }
 []    >>> 1969 Mustang
+
+
+=== COPY CONSTRUCTOR ===
+A copy constructor is a constructor with one parameter, which has the same type as the class. It creates an 
+object that is separate & independent BUT is the exact copy of the argument object.
+
+[]    public person(person p){
+[]        if(p==null)
+[]            System.exit(0);
+[]
+[]        // pre-defined getter methods
+[]        name=p.getName();
+[]        age=p.getAge();
+[]    }
+
+The java built-in .clone() method is built based on this. ~!clone()
+
+[]    // built-in clone method definition most-likely looks like this
+[]    public ClassName clone() {
+[]       return new ClassName(this);  <-- copy constructor
+[]    }
+
+[]    // clone method application
+[]    public Sale doCopy(Sale a) {
+[]       Sale b;
+[]       b = a.clone();
+[]    }
+
 
 
 ====== METHOD OVERLOADING ======
@@ -2212,6 +2551,25 @@ Need it? Absolutely not, but its such a cheap way to :
 
 NOTE: The access specifier for an overriding method can allow more, but not less, access than the overridden method.
       For example, a protected instance method in the superclass can be made public, but not private, in the subclass.
+
+NOTE: As a general rule, an override method cannot change the return type of the method definition. However, if the returned
+      type is of a class type, the returned type can be changed to the DESCENDANT (CHILD) class type.
+        []
+        []    public class Parent{
+        []        public static Parent getObj(){
+        []            ...
+        []            return parentObj;
+        []        }
+        []    }
+        []    public class Child extends Parent{
+        []        @Override
+        []        public static Child getObj(){
+        []            ...
+        []            return childObj;
+        []        }
+        []    }
+
+
 NOTE: You can not @Override static methods in Java, however you can declare a method with the same signature in
       a subclass. It won't be overridden in the exact sense, instead, that is called method hiding.
 
@@ -2222,6 +2580,7 @@ The following table summarizes what happens when you define a method with the sa
 Subclass Instance Method | @Overrides                     | Generates a compile-time error |
 Subclass Static Method   | Generates a compile-time error | Hides                          |
                          |--------------------------------|--------------------------------|
+NOTE: Instance Method (aka non-static method) thus, conclusion : static-static=hide, Non-Static-Non-Static=@Override, others=error
 
 
 []    public class random extends apple{
@@ -2639,7 +2998,9 @@ their software interacts. Each group should be able to write their code without 
 group's code is written. Generally speaking, interfaces are such contracts.
 
 Interfaces can have multiple implementations (multiple inheritance). Interface methods do not have a body - the
-body is provided by the "implement" class. On implementation of an interface, you must override all of its methods
+body is provided by the "implement" class. 
+
+NOTE: On implementation of an interface, you must override ALL of its methods
 (provide body) (required args must be pre-defined in interface methods)
 
 NOTE: Use 'implements' to define interface body. Use 'extends' to extend interface bodies. Codes that implement/rely

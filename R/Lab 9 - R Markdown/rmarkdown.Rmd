@@ -1,0 +1,86 @@
+---
+title: "LAB 9"
+author: "Goh Yi Xian"
+date: "28/12/2021"
+output:
+  html_document: 
+    theme:
+      bootswatch: lux
+---
+# Plotting with Iris Dataset
+
+![][flowers]
+
+### Introduction  
+
+**Iris**, introduced by Ronald Fisher in his 1936 paper The use of multiple measurements in taxonomic problems, contains three plant species (*setosa, virginica, versicolor*) and four features measured for each sample. These quantify the morphologic variation of the iris flower in its three species, all measurements given in centimeters.
+[Here's the link to the Official R Documentation on the Iris Dataset.](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris)
+<br>
+<br>
+<br>
+**Here's a sneak peak of the first few rows of the Iris Dataset...** 
+<br>
+
+```{r, echo=FALSE}
+library(datasets)
+data(iris)
+head(iris)
+```
+
+
+### Plots
+Plotting makes allows us to see different patterns and relations among variables. Here, we plot the below variables to discover the relationship between them. The source code to generate each plot is prepended before each plot.\
+- *Sepal.Length* vs *Sepal.Width*\
+- *Petal.Length* vs *Petal.Width*\
+<br>
+
+```{r, echo=FALSE, message=FALSE, figures-side, fig.show="hold", out.width="50%"}
+library(ggplot2)
+
+sepal <- ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point(aes(col=Species)) +
+  geom_smooth(method="lm", col="black") +
+  labs(title="Sepal: Length Vs Width", subtitle="A slightly negative relationship", y="Width", x="Length", caption="Dataset:Iris") +
+  scale_x_continuous(breaks=seq(4, 8, 0.5))
+
+petal <- ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
+  geom_point(aes(col=Species)) +
+  geom_smooth(method="lm", col="black") +
+  labs(title="Petal: Length Vs Width", subtitle="A positive relationship", y="Width", x="Length", caption="Dataset:Iris") +
+  scale_x_continuous(breaks=seq(1.0, 7.0, 1.0)) +
+  scale_y_continuous(breaks=seq(0, 2.5, 0.5))
+
+plot(sepal)
+plot(petal)
+```
+<br>
+<br>
+Source Code for Sepal: Length Vs Width
+```{r, echo=TRUE, message=FALSE, fig.show="hide"}
+library(ggplot2)
+
+sepal <- ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point(aes(col=Species)) +
+  geom_smooth(method="lm", col="black") +
+  labs(title="Sepal: Length Vs Width", subtitle="A slightly negative relationship", y="Width", x="Length", caption="Dataset:Iris") +
+  scale_x_continuous(breaks=seq(4, 8, 0.5))
+
+plot(sepal)
+```
+<br>
+Source Code for Petal: Length Vs Width
+```{r, echo=TRUE, message=FALSE, fig.show="hide"}
+library(ggplot2)
+
+petal <- ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
+  geom_point(aes(col=Species)) +
+  geom_smooth(method="lm", col="black") +
+  labs(title="Petal: Length Vs Width", subtitle="A positive relationship", y="Width", x="Length", caption="Dataset:Iris") +
+  scale_x_continuous(breaks=seq(1.0, 7.0, 1.0)) +
+  scale_y_continuous(breaks=seq(0, 2.5, 0.5))
+
+plot(petal)
+```
+
+
+[flowers]:https://keukenhof.nl/wp-content/uploads/190418LLU4179.jpg

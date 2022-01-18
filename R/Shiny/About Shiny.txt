@@ -1,0 +1,96 @@
+To learn:
+ - HTML
+ - CSS
+ - JavaScript
+ - R Shiny
+
+
+install packages("shiny")
+library(shiny)
+
+Small app/R code hosted on free shiny server, alternatives: AWS
+A shiny project needs:
+ - ui.R (controls how your app looks)
+ - server.R (controls what your app does)
+
+
+=== HTML ===
+Shiny provides several wrapper functions for using standard HTML tags in ui.R
+h1() to h6()   size large to small
+em()           emphasized text (unbold, slanted)
+p()            para
+a()
+br()
+hr()
+div()
+pre()
+img()
+span()
+code()         displays in code form, coloured
+strong()
+tag(`_tag_name`, varArgs, .noWS = NULL, .renderHook = NULL)
+
+See ?builder for more details
+
+
+=== Input/Output (I/O) ===
+Input: buttons,numericInput(), checkboxInput(), textInput(), calendars, sliderInput()
+
+
+=== App with Plots ===
+plotOutput()  for ui.R
+renderPlot()  for server.R
+for taking user input and creating plots
+
+
+=== Reactivity ===
+NOTE: {} used for reactive statements
+
+A reactive expression is like a recipe that manipulates inputs
+form Shiny and then returns a value. Reactivity provides a way
+for your app to respond since inputs will change depending on
+how users interact with your user interface. Expressions wrapped
+by 'reactive()' should be expression that are subject to change.
+
+#function adapts based on input
+calc_sum <= reactive({
+  input$box1 + input$box2
+})
+
+calc_sum()
+
+
+=== Delayed Reactivity ===
+You might not want your app to immediately react to changes in
+user input because of something like a long-running calculation.
+In order to prevent reactive expressions from reacting you can
+use a submit button in yout app.
+
+ui.R:  submitButton("Submit")
+
+
+=== Advanced UI ===
+There are several other kinds of UI components that you can
+mix into your app including tabs, navbars, sidebars.
+NOTE: tabs give your app multiple views
+
+The tabsetPanel() func specifies a group of tabs
+    tabPanel() func specifies the contents of an individual tab
+
+NOTE: you can customise the HTML!!
+
+1. Use R Shiny to generate the page, open in browser, copy the HTML code
+#Opt: you can get rid of all the dependencies like bootstrap, shinyblablabla
+      in the top section <head>...</head>
+2. paste the HTML content in a file named 'index.html'
+3. create a folder named 'www' in the same directory as server.R
+4. delete ui.R
+5. put 'index.html' in the 'www' folder
+6. from RStudio, runapp from 'server.R'
+
+
+=== Interactive Graphics ===
+Shiny can create graphics that users can interact with.
+One method you can use to select multiple points on a graph is
+by specifying the 'brush' argument in 'plotOutput()' on the 'ui.R'
+side.

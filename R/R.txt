@@ -1,7 +1,24 @@
+learn R: https://www.tutorialspoint.com/r/index.htm
+         https://www.codecademy.com/learn
+
 #R is a language that is optimized for data analysation, and outputs a HTML source page that allows user to view the page using a Web Browser.
 #You can also output the result by just calling the variable straight.
-#Extension: filename.Rmd
-Syntax:
+#Extension: filename.R
+    R scripts can be read into RStudio using 'open', run by 'Shift''Command''Enter'
+    To run certain lines of code, highlight and click 'run'.
+    To clear console, '^''L'
+
+~!help===============
+[]    ? t.test
+[]    help(t.test)
+[]    example(t.test)
+[]    demo( )
+[]    demo (recursion)
+[]    help.start( ) # for HTML browser interface
+[]    q( ) # quit R
+
+
+============================================================================================================================================ ~!Syntax
 
 ' ' '{r}
 #code goes here
@@ -9,51 +26,786 @@ Syntax:
 #can have multiple blocks
 ' ' '
 
-#data types: numerics, string""/char'', logical(TRUE/FALSE), Vectors/list(c("elem", ..)), NA(null)
+============================================================================================================================================ ~!Reserved Words
+if        else         repeat
+while     function     for
+next      break        TRUE
+FALSE     NULL         Inf
+NaN       NA           NA_integer_
+NA_real_  NA_complex_  NA_character_
 
-#Operators are same as Java & Python: +_*/= > < >= <= == !=
-#Logical Operators &:and, |:or, !:not
+============================================================================================================================================ ~!Data Types
+[L-N-I-C-C]
+
+Logical: TRUE, FALSE
+Numeric: 12.5, 3
+Integer: 2L, 34L
+Complex: 3+2i
+Character: 'a', "good", "TRUE", '23.4'
+Raw: charToRaw("Hello") is stored as 48 65 6c 6c 6f
+
+
+============================================================================================================================================ ~!Operators
+#Operators are same as Java & Python: +-*/^= > < >= <= == !=
+#Logical Operators:                   & | !
 
 #alternate assignment syntaxes
-var1 = 20
-var2 <- 20
+[]    var1 = 20
+[]    var2 <- 20
+
+
+============================================================================================================================================ ~!Objects
+Attribute  Description
+class     The class of the object.
+comment   A comment on the object; often a description of what the object means.
+dim       Dimensions of the object.
+dimnames  Names associated with each dimension of the object.
+names     Returns the names attribute of an object. Results depend on object type;
+            for example, it returns the name of each data column in a data frame
+            or each named object in an array.
+row.names The name of each row in an object (related to dimnames).
+tsp       Start time for an object. Useful for time series data.
+levels    Levels of a factor.
 
 
 ============================================================================================================================================ ~!Vectors
-lisz = c("index1", "index2", "index3")    <-- c() combine method
-sort(lisz)
-length(lisz)
-typeof(lisz)
-lisz[2]
-lisz_2 = unique(lisz)   <-- takes a vector argument and returns a vector with only the unique elements in that vector (removing all duplicates).
+SAME : ONLY contains elements of the SAME data type.
+
+[]    Vc = c("index1", "index2", "index3")    <-- c() combine method
+[]    Vc = 1:10                               <-- 1 to 10
+[]    sort(Vc)
+[]    length(Vc)
+[]    typeof(Vc)
+[]    Vc[2]               <-- Indexing: 1,2,3,4,5, ...
+[]    Vc_2 = unique(Vc)   <-- takes a vector argument and returns a vector with only the unique elements
+                              in that vector (removing all duplicates).
+[]    Vc_3 <- c(1,2,3,4,5,6,7,8,9)
+[]    u <- Vc_3 > 3
+[]    u
+...   FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
 
 
-============================================================================================================================================ ~!if-else
-if(x > 0) print("Non-negative number") else print("Negative number")
+============================================================================================================================================ ~!Factors
+SAME : ONLY contains elements of the SAME data type.
 
-if (TRUE){
-    #code
-} else if (TRUE) {
-    #code
-} else {
-    #code
+[]    factor(DataVc, ordered=T/F(def), levels=Vc1, labels=Vc2)
+[]    nlevels(Fc)
+
+In the statistical world, there exists the need for categorical data : data of a few defined types but diff frequency.
+In java terms, Enumerates. i.e. blood_type = factors("A", "A", "O", "AB", "O", "B", ...)
+
+In R factors, levels are the pre-defined categorical data. In blood_type, levels = A, AB, B, O.
+When a factor obj is created, R scans through all elems, detecting all level values.
+Levels by default are arranged alphabetically.
+
+[]    > blood = c("A", "B", "AB", "A", "O", "AB", "O")
+[]    > blood_factors = factor(blood)
+[]    > blood_factors
+[]    [1] A  B  AB A  O  AB O         <-- NOTE: there's no "" anymore
+[]    Levels: A AB B O                <-- arranged alphabetically
+[]    > nlevels(blood_factors)
+[]    [1] 4
+
+R converts values in factors to a numerical vector for mapping to levels & displaying purposes.
+Thus factors are also called numerical vectors.
+
+[]    > str(blood_factors)
+[]     Factor w/ 4 levels "A","AB","B","O": 1 3 2 1 4 2 4      <-- Numerical Vector
+
+To customise levels' order:
+
+[]    > blood_factors_2 = factor(blood, levels = c("O","A","B","AB"))
+[]    > blood_factors_2
+[]    [1] A  B  AB A  O  AB O
+[]    Levels: O A B AB                                       <-- levels order customised
+[]    > str(blood_factors_2)
+[]     Factor w/ 4 levels "O","A","B","AB": 2 3 4 2 1 4 1    <-- numerical mapping changed
+
+To customise level names (labels):
+
+[]    > levels(blood_factors) = c("BT_A", "BT_AB", "BT_B", "BT_O")    <-- To prevent confusion, new levels order must = old levels order
+[]    > blood_factors
+[]    [1] BT_A  BT_B  BT_AB BT_A  BT_O  BT_AB BT_O
+[]    Levels: BT_A BT_AB BT_B BT_O
+
+or
+
+[]    > blood_factors = factor(blood, labels=c("BT_A", "BT_AB", "BT_B", "BT_O"))
+[]    > blood_factors
+[]    [1] BT_A  BT_B  BT_AB BT_A  BT_O  BT_AB BT_O
+[]    Levels: BT_A BT_AB BT_B BT_O
+
+To prevent confusion/error when manually specifying labels:
+
+[]    > blood_factors = factor(blood, levels=c("O", "A", "B", "AB"),
+[]    +                               labels=c("BT_O", "BT_A", "BT_B", "BT_AB"))
+[]    > blood_factors
+[]    [1] BT_A  BT_B  BT_AB BT_A  BT_O  BT_AB BT_O
+[]    Levels: BT_O BT_A BT_B BT_AB
+
+
+=== Nominal vs Ordinal Values ===
+Nominal: No order, meaningless to compare sequence/value i.e. blood type
+Ordinal: Ordered, useful to compare sequence/value i.e. T-Shirt size
+
+[]    > blood_factors[1] > blood_factors[2]
+[]    [1] NA
+[]    Warning message:
+[]    In Ops.factor(blood_factors[1], blood_factors[2]) :
+[]      ‘>’ not meaningful for factors
+
+[]    > tshirt = factor(c('S', 'M', 'XL', 'L', 'M', 'S', 'L'), ordered=TRUE, levels=c('S', 'M', 'L', 'XL'))
+[]    > tshirt
+[]    [1] S  M  XL L  M  S  L
+[]    Levels: S < M < L < XL       <--NOTE: Ordinal levels: with </>
+[]    > tshirt[1]>tshirt[2]
+[]    [1] FALSE
+
+
+
+
+============================================================================================================================================ ~!Matrix
+SAME : ONLY contains elements of the SAME data type. 2D ONLY
+
+[]    Ma = matrix( c(1,2,3,4,5,6,7,8,9,10,11,12), nrow=3 )   <-- col is automatically calculated
+[]    Ma = matrix( 1:12, nrow=3, ncol=4 )
+
+    > Ma -------------------
+         [,1] [,2] [,3] [,4]
+    [1,]    1    4    7   10   |  [i, j]  i-row j-col
+    [2,]    2    5    8   11   |  Col filled
+    [3,]    3    6    9   12   V
+    ------------------------
+
+[]    matrix( Vc, nrow=?, ncol=?, byrow=T/F(def), dimnames=NULL/list_row_col_name(length=2) )
+[]                                ^
+[]                                fill the matrix by row / col(default)
+[]    as.matrix()   <-- Attempts to turn its args into a Matrix
+[]    is.matrix()   <-- test if its arg is a (STRICT) Matrix
+[]    Ma[i, j]      <-- indexing i-row j-col
+
+
+============================================================================================================================================ ~!Lists
+DIFF : can contain elements of diff data types.
+
+[]    lisz1 = list(3, 'A', 4, "G")
+
+~!Subsetting / ~!Categorization
+Below list, x has its elems categorized into 3 categories, namely 'foo' 'bar' 'baz'.
+They can be access either by name, index or $name.
+
+[]    x <- list(foo = 1:4, bar = 0.6, baz = "hello")
+[]    x[['foo']]    <-- cat 'foo'
+[]    x[[1]]        <-- cat 1 = 'foo'
+[]    x$foo         <-- cat 'foo'
+...   [1] 1 2 3 4
+
+
+============================================================================================================================================ ~!Data Frame ~!df
+DIFF : can contain elements of diff data types.
+
+[]    df = data.frame(
+[]      col1 = c(3,2,1),
+[]      col2 = c("A", "T", "G"),
+[]      col3 = c(4,5,7),
+[]      col4 = c("C", "G", "C"),
+[]      ...
+[]    )
+
+    > df
+       +----+----+----+   <-- Relation
+       |    |    |    |
+      col1 col2 col3 col4
+    1    3    A    4    C
+    2    2    T    5    G
+    3    1    G    7    C
+    ---------------------
+
+#more methods on df below, see tag_dplyr
+
+
+============================================================================================================================================ ~!Arrays
+[]    arr <- array( c('green','yellow'), dim = c(3,3,2) )      <-- R logic, repeat elems until all place holders filled.
+                                              (row, col, z)
+
+    > arr -------------------------
+    , , 1
+
+         [,1]     [,2]     [,3]
+    [1,] "green"  "yellow" "green"
+    [2,] "yellow" "green"  "yellow"
+    [3,] "green"  "yellow" "green"
+
+    , , 2
+
+         [,1]     [,2]     [,3]
+    [1,] "yellow" "green"  "yellow"
+    [2,] "green"  "yellow" "green"
+    [3,] "yellow" "green"  "yellow"
+    -------------------------------
+
+[]    array(data=?, dim=Vc/length(data), dimnames=NULL/list())
+[]    ar <- array(data     = 1:27,
+[]                dim      = c(3, 3, 3),
+[]                dimnames = list(c("a", "b", "c"),
+[]                                c("d", "e", "f"),
+[]                                c("g", "h", "i")))
+
+    > ar -----
+    , , g
+
+      d e f
+    a 1 4 7
+    b 2 5 8
+    c 3 6 9
+
+    , , h
+
+       d  e  f
+    a 10 13 16
+    b 11 14 17
+    c 12 15 18
+
+    , , i
+
+       d  e  f
+    a 19 22 25
+    b 20 23 26
+    c 21 24 27
+    ----------
+
+[]    as.array()  <-- Attempts to convert to array
+[]    is.array()  <-- Tests if is array
+[]    arr[i,j,k]  <-- Access i-row, j-col, z-layer
+
+
+============================================================================================================================================ ~!Loops ~!Conditions
+1. ~!IF-ELSE IF-ELSE
+    []    if(x > 0) print("Non-negative number") else print("Negative number")  # without assignment
+    []    y <- if(expression) True_Val else False_Val                           # with assignment
+
+    []    if (TRUE){
+    []        #code
+    []    } else if (TRUE) {
+    []        #code
+    []    } else {
+    []        #code
+    []    }
+
+2. ~!FOR
+    []    for (i in 1:length(x)) {
+    []        #code
+    []    }
+
+3. ~!REPEAT
+    repeat{ (conditon) expression }
+    []    i=10
+    []    > repeat{
+    []    +     if(i>25){
+    []    +         break
+    []    +     } else {
+    []    +         print(i)
+    []    +         i=i+5
+    []    +     }
+    []    + }
+    []    [1] 10
+    []    [1] 15
+    []    [1] 20
+    []    [1] 25
+
+4. ~!WHILE
+    []    > i=10
+    []    > while(i<25){
+    []    +     print(i)
+    []    +     i=i+5
+    []    + }
+    []    [1] 10
+    []    [1] 15
+    []    [1] 20
+
+5. ~!SWITCH ~!CASE
+    []    > AA = 'foo'
+    []    > switch(AA,
+    []    +     foo = {
+    []    +         print('foo')      # case 'foo'
+    []    +     },
+    []    +     bar = {
+    []    +         print('bar')      # case 'bar'
+    []    +     },
+    []    +     {
+    []    +         print('default')  # default
+    []    +     })
+    []    [1] "foo"
+
+6. ~!BREAK ~!NEXT ~!CONTINUE
+    'break'
+    In java & python we use 'continue', here in R we use 'next'
+
+
+============================================================================================================================================ ~!APPLY()
+ref: https://www.datacamp.com/community/tutorials/r-tutorial-apply-family#family
+     https://www.guru99.com/r-apply-sapply-tapply.html
+Alternatives to writing for-loop and while-loop.
+The apply() family pertains to the R base package and is populated with functions to manipulate slices of data from matrices,
+arrays, lists and dataframes in a repetitive way. These functions allow crossing the data in a number of ways and avoid explicit
+use of loop constructs. They act on an input list, matrix or array and apply a named function with one or several optional arguments.
+NOTE: R functions passed as args to other functions are written without brackets ().
+
+[A-L-S-T-V-R]
+
+Input-Type              Return-Type               Function-Name
+======================================================================================================
+[DF / MATRIX / ARR]     [Vc / List / Arr]         apply(X, MARGIN, FUNC)
+                                                     - applies a function to a matrix's rows or columns (Margins)
+
+[DF / LIST / VECTOR]    [List]                    lapply(X, FUNC, opt_ROW, opt_COL)
+                                                     - list apply which acts on a list or vector and returns a list
+
+[DF / LIST / VECTOR]    [Vc / Matrix / Arr]       sapply(X, FUNC, opt_ROW, opt_COL)
+                                                     - simple lapply (function defaults to returning a vector or matrix when possible)
+
+[DF / VECTOR]           [Arr]                     tapply(X, FACTOR, FUNC)
+                                                     - tagged apply where it performs operations for each factor variable in a vector
+                                                       NOTE: (suitable for grouping / Factors)
+
+[DF / VECTOR]           [Arr(type_predefined)]    vapply(X, FUNC, type)
+                                                     - verified apply (allows the return object type to be prespecified)
+                                                       NOTE: (suitable if you know what return type you want)
+
+[DF / LIST]             [Arr]                     rapply(X, FUNC, class=?, how="list/unlist/replace", deflt=?)
+                                                     - recursive apply for nested lists, i.e. lists within lists
+                                                       NOTE: (suitable for nested list / specific class to work with)
+
+ref: Apply().png
+
+HACK: ~!with() ============================
+[]    with(df, tapply(name, subject, mean))
+is equivalent to
+[]    tapply(df$name, df$subject, mean)
+
+
+1. ~!APPLY() [DF / MATRIX / ARR] returns [Vc / List / Arr]    General Apply
+    ------------------------------------------------------
+    []    apply(X, MARGIN, FUNC)
+
+        - X is an array or a matrix if the dimension of the array is 2.
+        - MARGIN is a variable defining how the function is applied:
+              MARGIN=1, rows
+              MARGIN=2, columns
+              MARGIN=c(1,2), rows and columns.
+        - FUNC, which is the function that you want to apply to the data. It can be any R function, including a User Defined Function (UDF).
+
+    []    > x = matrix(rnorm(30), 5,6)
+    []    > apply(x, 1, sum)             <--MARGIN=1, Row
+    []    [1] -2.03740970 -0.53933230 -0.70495635 -0.06683842  1.46191181
+    []    > apply(x, 2, sum)             <--MARGIN=2, Col
+    []    [1]  3.25932575 -2.04233812  0.01028263  1.12877538 -4.70943567  0.46676507
+
+
+
+2. ~!LAPPLY() [DF / LIST / VECTOR] returns [ List ]    List Apply
+    -----------------------------------------------
+    []    lapply(X, FUNC, opt_ROW, opt_COL)
+
+        - X is an array, matrix or vector etc.
+        - FUNC is the function
+        - ROW, COL specifies the row/col that the function is to be acted on.
+
+    []    > MyList <- list(A,B,C)      <-- Create a list of matrices
+    []    > lapply(MyList,"[", , 2)    <-- Extract the 2nd column from `MyList` with the selection operator `[`
+    []    [[1]]
+    []    [1] 4 5 6
+    []    [[2]]
+    []    [1]  8  9 10 11
+    []    [[3]]
+    []    [1]  8  9 10
+    []
+    []    > lapply(MyList,"[", 1, )    <-- Extract the 1st row from `MyList`
+    []    [[1]]
+    []    [1] 1 4 7
+    []    [[2]]
+    []    [1]  4  8 12
+    []    [[3]]
+    []    [1] 8 8
+
+
+
+3. ~!SAPPLY() [DF / LIST / VECTOR] returns [ Vc / Matrix / Arr ]    Simplified List Apply
+    ------------------------------------------------------------
+    []    sapply(X, FUNC, opt_ROW, opt_COL)
+
+        - X is an array, matrix or vector etc.
+        - FUNC is the function
+        - ROW, COL specifies the row/col that the function is to be acted on.
+        NOTE: Same as lapply(), but returns a Vector/Matrix (which we call 'simplified').
+              However, if the 'simplify' arg of the method is set to FALSE, it is the same as lapply()
+
+    []    > sapply(df, mean, 2, 1, simplify=TRUE)         <-- default: simplify=TRUE
+    []      Ozone Solar.R    Wind    Temp   Month     Day
+    []       31.5   205.0     9.7    79.0     7.0    16.0
+    []
+    []    > sapply(df, mean, 2, 1, simplify=FALSE)
+    []    $Ozone
+    []    [1] 31.5
+    []
+    []    $Solar.R
+    []    [1] 205
+    []
+    []    $Wind
+    []    [1] 9.7
+    []
+    []    $Temp
+    []    [1] 79
+    []
+    []    $Month
+    []    [1] 7
+    []
+    []    $Day
+    []    [1] 16
+
+
+
+4. ~!TAPPLY() [DF / VECTOR] returns [ Arr ]    Tagged Apply
+    ---------------------------------------
+    []    tapply(X, FACTOR, FUNC)
+
+        - X is usually a vector
+        - FACTOR are the factors to be acted upon.
+        - FUNC is the function.
+        NOTE: tapply() performs operations (usually mean, median, min, max, ..) over a data type called factor.
+              Therefore, its good for grouping purposes.
+
+    []    > name = c('ting', 'ting', 'ting', 'chong', 'chong', 'chong')
+    []    > subject = c('IT', 'CS', 'AI', 'IT', 'CS', 'AI')
+    []    > marks = c(90, 95, 80, 90, 99, 85)
+    []    > df = data.frame(name, subject, marks)
+    []    > df
+    []       name subject marks
+    []    1  ting      IT    90
+    []    2  ting      CS    95
+    []    3  ting      AI    80
+    []    4 chong      IT    90
+    []    5 chong      CS    99
+    []    6 chong      AI    85
+    []
+    []    > tapply(df$marks, df$name, sum)
+    []    chong  ting
+    []      274   265
+
+
+
+5. ~!VAPPLY() [DF / VECTOR] returns [ Arr(type_predefined) ]    Verified Apply
+    --------------------------------------------------------
+    []    vapply(X, FUNC, type)
+
+        - X is usually a vector
+        - FUNC is the function.
+        - type is the return type of the array.
+          Numeric: numeric(1)    #all items in R have length=1. i.e. 543563.345, "ihfcb"
+          NOTE: if the specified return type != the return type of the FUNC, error thrown.
+          Data Types: Logical, Numeric, Integer, Complex, Character
+
+    []    > vapply(df, mean, numeric(1))
+    []        Ozone   Solar.R      Wind      Temp     Month       Day
+    []           NA        NA  9.957516 77.882353  6.993464 15.803922
+
+
+
+6. ~!RAPPLY() [DF / LIST] returns [ Arr ]    Recursive Apply
+    ---------------------------------------
+    []    rapply( X, FUNC, class=?, how="list/unlist/replace", deflt=? )
+
+        - X is usually a vector
+        - FUNC is the function.
+        - class is the specified class in which its elems are allowed to be worked with the function.
+        Data Types: Logical, Numeric, Integer, Complex, Character [LNICC]
+        ref: https://www.r-bloggers.com/2016/02/rapply-function-explanation-and-examples/
+
+    Below, since class only contains "numeric", the "character" class "a" is ignored.
+    []    > x=list(1,2,3,4,"a")
+    []    > rapply(x,function(x){x^2},class=c("numeric"))
+    []    [1]  1  4  9 16
+
+    Below demonstartes the recursive nature of rapply().
+    []    > x=list(1,list(2,3),4,list(5,list(6,7)))
+    []    > rapply(x,function(x){x^2},class=c("numeric"))
+    []    [1]  1  4  9 16 25 36 49
+
+    how="list" keeps the original structure of the list.
+    []    > x=list(1,list(2),"f")
+    []    > a=rapply(x,function(x){x^2},class=c("numeric"),how="list",deflt="p")
+    []    > a
+    []    [[1]]
+    []    [1] 1
+    []    [[2]]
+    []    [[2]][[1]]
+    []    [1] 4
+    []    [[3]]
+    []    [1] "p"
+
+    how="unlist" simplifies the results into a simple list.
+    []    > x=list(1,list(2),"f")
+    []    > a=rapply(x,function(x){x^2},class=c("numeric"),how="unlist",deflt="p")
+    []    > a
+    []    [1] "1" "4" "p"
+
+    how="replace" keeps the values of the untouched class elems, ignoring the "deflt" value.
+    []    > x=list(1,list(2),"f")
+    []    > a=rapply(x,function(x){x^2},class=c("numeric"),how="replace",deflt="p")
+    []    > a
+    []    [[1]]
+    []    [1] 1
+    []    [[2]]
+    []    [[2]][[1]]
+    []    [1] 4
+    []    [[3]]
+    []    [1] "f"
+
+
+
+============================================================================================================================================ ~!Basic ~!Common Methods
+01.    print("Hello World")
+       print(paste("This is", x, "and this is", y))   <-- no need to add spacing, auto added: This is x and this is y
+
+02.    class(45)        <-- checks class/data type
+
+03.    sum(num1, num2, num3, ..)
+
+04.    floor(num)
+       ceiling(num)
+
+05.    sqrt(num)
+
+06.    plot(df/Vc/... )
+
+07.    nrow(df/array/vector)
+       ncol(df/array/vector)
+
+08.    1:3              <-- equivalent to c(1,2,3)
+
+09.    v <- LETTERS[1:4]
+      [1] "A" "B" "C" "D"     #class "character"
+
+10.    paste('a', 'b', 'c', sep='***')
+       [1] a***b***c
+           paste(c(1,2,3), c('a', 'b'), sep='-')     <-- R logic: loop through elems until all filled
+           [1] "1-a" "2-b" "3-a"
+
+
+11.   split(X, split_key)
+        []    > df                     <-- gives you a picture of df
+        []       name subject marks
+        []    1  ting      IT    90
+        []    2  ting      CS    95
+        []    3  ting      AI    80
+        []    4 chong      IT    90
+        []    5 chong      CS    99
+        []    6 chong      AI    85
+        []
+        []    > split(df, df$name)     <-- split based on name
+        []    $chong
+        []       name subject marks
+        []    4 chong      IT    90
+        []    5 chong      CS    99
+        []    6 chong      AI    85
+        []
+        []    $ting
+        []      name subject marks
+        []    1 ting      IT    90
+        []    2 ting      CS    95
+        []    3 ting      AI    80
+
+
+12.   === The '[' Selection Operator/Function ===
+        // ~![] ~!'[' ~!"["
+        The square brackets [] are in fact a function whose first argument is the object being subsetted/indexed.
+        Subsequent arguments are the index to that subset.
+        For example, if M is a matrix, to extract the element at row 1, col 2
+        []    M[1, 2]
+        is the same as
+        []    `[`(M, 1, 2)
+
+
+============================================================================================================================================ ~!NA
+[]    is.na(whatever)   <-- test objects if they are NA, returns Boolean for single item, Bool Vc for multiple item
+[]    is.nan(whatever)
+[]    sum(is.na(df_elem))     <-- sum number of NA (true)
+[]    na.omit(df_elem)        <-- returns a df omitting NA
+
+How many rows with NA in the column "nitrate"?
+[]    > nrow(df[is.na(df$nitrate),])
+How many rows without NA in the column "Sulfate"?
+[]    > nrow(df[!is.na(df$sulfate),])
+
+NaN (“Not a Number”) means 0/0, due to undefined mathematical operations
+NA (“Not Available”) is generally interpreted as a MISSING VALUE and has various forms – NA_integer_, NA_real_, etc.
+Therefore, NaN ≠ NA and there is a need for NaN and NA.
+
+NA values have a class also, so there are integer NA and character NA etc.
+NOTE: NaN value is also NA but the converse is not true.
+
+Thus, is.na() returns TRUE for both NA and NaN, however is.nan() return TRUE for NaN and FALSE for NA.
+
+
+=== Removing NA ===
+[]    > x <- c(1, 2, NA, 4, NA, 5)
+[]    > bad <- is.na(x)
+[]    > x[!bad]
+[]    [1] 1 2 4 5
+
+[]    na.omit(x)
+[]    mean( data, na.rm=T/F(def) )      <-- returns mean of df, na.rm includes NA & NaN
+[]    sum( data, na.rm=T/F(def) )
+[]    colSums( data, na.rm=T/F(def) )
+[]    rowSums( data, na.rm=T/F(def) )
+[]    colMeans( data, na.rm=T/F(def) )
+[]    rowMeans( data, na.rm=T/F(def) )
+
+complete.cases(..) method returns a logical vector indicating which rows are complete or no missing values.
+
+[]    > data = c(NA, 4, 6, 7, NA, NA, 2)
+[]    > complete.cases(data)
+[]    [1] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
+
+To filter out:
+
+[]    > data = data[complete.cases(data)]
+[]    > data
+[]    [1] 4 6 7 2
+
+Also works with multiple arguments:
+
+[]    > data = c(NA, 4, 6, 7, NA, NA, 2)
+[]    > doto = c(1, NA, 3, NA, 3, 4, 1)
+[]    > complete.cases(data, doto)
+[]    [1] FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
+
+Filtering out incomplete rows in data.frame
+
+[]    > df_comp = complete.cases(df)
+[]    > df1 = df[df_comp, ]
+
+
+============================================================================================================================================ ~!Coercion ~!Conversion
+Object can be explicitly coerced/converted from one class to another using the as.* functions, if available.
+
+[]    > x <- 0:6
+[]    > class(x)
+[]    [1] "integer"
+
+[]    > as.numeric(x)                           <-- numeric
+[]    [1] 0 1 2 3 4 5 6
+
+[]    > as.logical(x)                           <-- logical ( '>=1' == TRUE )
+[]    [1] FALSE TRUE TRUE TRUE TRUE TRUE TRUE
+
+[]    > as.character(x)                         <-- character
+[]    [1] "0" "1" "2" "3" "4" "5" "6"
+
+[]    > as.complex(x)                           <-- complex
+[]    [1] 0+0i 1+0i 2+0i 3+0i 4+0i 5+0i 6+0i
+
+NOTE: sometimes coercion results in unexpected results i.e. String/Character to numeric/logical ..etc
+
+
+============================================================================================================================================ ~!Functions ~!Defining
+    function_name <- function( optional arg1, arg2, ... ){
+        #code        ^^^^^^^^ keyword                    ^ curly braces
+        return(item)
+    }
+
+new.function <- function(a,b,c){
+    return(a*b+c)
 }
 
-y <- if(x > 0) 5 else 6
+#Call function by positional arguments
+    new.function(5,3,11)
+
+#Call function by name of arguments
+    new.function(a=5, b=3, c=11)     <-- random order
+
+#Create function with default arguments
+    new.function <- function(a=3, b=6){
+        print(a*b)
+    }
+    - Call the function without giving any arguments (using the default/pre-defined arg)
+        new.function()     >>> 18
+    - Call the function with giving new values to default argument
+        new.function(9,5)  >>> 45
 
 
-============================================================================================================================================ ~!common methods
-print("Hello World")
-class(45)        <-- checks class/data type
-sum(num1, num2, num3, ..)
-floor(num)
-ceiling(num)
-sqrt(num)
-nrow(df/array/vector)
-ncol(df/array/vector)
+============================================================================================================================================ ~!Datetime ~!Time
+Dates are represented by Date class.
+Times are represented by the POSIXct and POSIXlt class.
+Dates and times are stored internally as number since 1970-01-01.
 
+[]    > date()
+[]    [1] "Sat Nov 13 16:18:45 2021"
+[]    > Sys.time()
+[]    [1] "2021-11-13 16:42:35 +08"
+
+Dates can be coerced from a character string using the 'as.Date()' function.
+
+[]    > today <- "12/3/2019"
+[]    > class(today)
+[]    [1] "character"
+[]    > today.date <- as.Date(today, "%d/%m/%Y")
+[]    [1] "2019-03-12"                       ^ NOTE: Cap Y, if small y: 2020-03-12
+[]    > class(today.date)
+[]    [1] "Date"
+
+POSIXct stores date and time in seconds with the number of seconds beginning at 1 January 1970.
+Negative numbers are used to store dates prior to 1970. Thus, the POSIXct format stores each
+date and time a single value in units of seconds.
+
+The POSIXlt class stores date and time information in a format that we are used to seeing
+(e.g., second, min, hour, day of month, month, year, numeric day of year, etc) seperately.
+
+POSIXlt & POSIXct are just different storage methods of date and time. The outputs are the same.
+
+[]    > x <- Sys.time()
+[]    > x
+[]    [1] "2021-11-13 16:44:29 +08"
+[]    > p <- as.POSIXlt(x)
+[]    > p
+[]    [1] "2021-11-13 16:44:29 +08"
+[]    > k <- as.POSIXct(x)
+[]    > k
+[]    [1] "2021-11-13 16:44:29 +08"
+
+Date time object attributes.
+
+[]    > unclass(p)
+[]        $sec       $min   $hour   $mday   $mon   $year   $wday   $yday   $isdst   $zone   $gmtoff   attr(,"tzone")
+[]    [1] 29.79458   44     16      13      10     121     6       316     0        "+08"   28800     ""      "+08"   "+0720"
+
+[]    > p$zone
+[]    [1] "+08"
+
+
+
+===== ~!system.time() =====
+
+[]    system.time(expression/operation)
+
+this line of code will allow you to track how much time is used for 'user', 'system' and 'elapsed'.
+For exmaple, plotting a graph of 100000 randomly generated values with mean=0, sd=1.
+
+[]    > system.time(plot(rnorm(100000)))
+[]       user  system elapsed
+[]      1.010   0.005   1.023
+
+User CPU time – the amount of time the processor spends in running your application code (i.e., the current R session).
+System CPU time - the amount of time the processor spent in running the operating system(i.e. kernel) functions connected to your application.
+Elapsed Time - the wall clock time taken to execute the function
+
+
+Usually both 'user' and 'elapsed' times are relatively close. But they may vary in some other situations. For example:
+    - If elapsed time > user time, this means that the CPU is waiting around for some other operations (may be external) to be done.
+    - If elapsed time < user time, this means that your machine has multiple cores and is able to use them.
 
 ============================================================================================================================================ ~!Pipelining H[G(f(x))]
+// ~!pipeline ~!%
 The pipe operator, or %>%, helps increase the readability of data frame code by piping the value on its left into
 the first argument of the function that follows it. For example:
 
@@ -80,13 +832,23 @@ In Brief: summary(select(df, -lat, -lon))
 []    install.packages("package_name")
 []    install.packages(c("pack1", "pack2", ..))
 
+Some common libraries: readr dplyr tidyr stringr lubridate httr ggvis ggplot2 shiny rio rmarkdown
+                       pacman
+pacman loads other libs more easily.
+[]    pacman::p_load(pacman, dplyr, GGally, ggplot2, ggthemes, ggvis, httr, lubricate, plotly, rio, rmarkdown, shiny, stringr, tidyr)
+
 
 ============================================================================================================================================ ~!importing packages !!! no ''/""
 []    library(package_name)
 
 
-============================================================================================================================================ ~!dplyr / readr
- dplyr provides functions that solve many challenges that arise when organizing tabular data
+
+============================================================================================================================================ ~!web scraping
+https://www.freecodecamp.org/news/an-introduction-to-web-scraping-using-r-40284110c848/
+
+============================================================================================================================================ ~!dplyr
+more at: https://www.listendata.com/2016/08/dplyr-tutorial.html
+ dplyr provides functions that solve many challenges that arise when organising tabular data
    - select columns of a table
    - filter rows of a table
    - arrange rows of a table in order
@@ -94,37 +856,109 @@ In Brief: summary(select(df, -lat, -lon))
 A data frame/tibble is an R object that stores tabular data in a table structure made up of rows and columns.
 While data frames can be created in R, they are usually imported with data from a CSV, an Excel spreadsheet, or a SQL query.
 
-#======== .CSV
-# CSV (comma separated values) is a text-only spreadsheet format. Example:
+CSV (comma separated values) is a text-only spreadsheet format. Example:
 # column1,column2,column3  <--will be title
 # value1,value2,value3
 # value4,value5,value6
 
 #======== readr
-[]    df = read_csv('file.csv')   <--df: data frame object
+[]    df = read_csv('file.csv', header=TRUE, sep=",")   <--df: data frame object (a tibble actually)
+[]    df = read.csv('file.csv', header=TRUE, sep=",")   <--df: imports a regular old R data frame
 []    write_csv(df, "location.csv")  <-- pass in df
 
 #======== dplyr
 # Each of the dplyr functions you will explore takes a data frame as its first argument.
+[]    View(df)      <-- Views df in the source panel as if being viewed in Excel format.
 []    head(df, n)   <-- displays first n rows of data, default 6, optional n
+[]    head(df, -n)  <-- displays all rows except last n rows.
+[]    tail(df, n)   <-- invertion of head function
+[]    tail(df, -n)  <-//
+[]
+[]    min( df, na.rm=T/F(def) )      <-- na.rm includes NA & NaN
+[]    max( df, na.rm=T/F(def) )
+[]    median( df, na.rm=T/F(def) )
+[]    mean( df, na.rm=T/F(def) )
+[]    sum( df, na.rm=T/F(def) )
+[]    colSums( df, na.rm=T/F(def) )
+[]    rowSums( df, na.rm=T/F(def) )
+[]    colMeans( df, na.rm=T/F(def) )
+[]    rowMeans( df, na.rm=T/F(def) )
 []    summary(df)   <-- MIN, Q1, Median, Mean, Q3, MAX for each numeric column,
 []                      length, Class, mode for non-numerics
+[]    dim(df)       <-- returns dimension of df (Row, Col)
+[]    str(df)       <-- returns structure of df
+[]    typeof(df[,y])<-- returns type of column data type
+[]    nrow(df/Arr/Vc)  <-- Returns num of rows
+[]    ncol(df/Arr/Vc)  <-- Returns num of cols
+[]
+[]    plot(df/Vc/..)   <-- plots multiple graphs for all possible Col1 vs Col2 graph
+[]
+[]    df[x,y]       <-- Returns value at data frame's x-Row y-Col (y can be num/NAME)
+[]    Tb = df[x,]   <-- Returns Tibble with selected x-Row
+[]    Tb = df[,y]   <-- Returns Tibble with selected y-Col
+[]    tb = df$col   <--//
 []
 []    Df = select(df, wanted_column1, wanted_colum2, ...)  <-- returns new df with selected cols only
 []         select(df, -to_remove1, -to_remove2, ...)       <-- returns new df with selected cols rmvd
+[]         select(df, -c(to_remove1, toremove2, ...))      <-/
+[]         select(df, starts_with("Y"))                    <-- returns new df with colnames starting with "Y"
+[]         select(df, -starts_with("Y"))                   <-- removes cols with colnames starting with "Y"
+[]             starts_with()
+[]             ends_with()
+[]             contains()
+[]             matches()    <-- regex
+[]             numrange()   <-- Numerical Range like x01, x02..
+[]             one_of()     <-- variables in a character vector
+[]             everything() <-- all variables
+[]
+[]         NOTE: rearranging precedence of columns
+[]         i.e.  Index, Y2001, ...., State
+[]         > data = select(data, State, everything())
+[]         result:  State, Index, Y2001, ...
+[]
 []    Df = filter(df, conditions)                          <-- returns new df with rows that fulfill condition (> >= < <= == !=)
 []         filter(df, first_name=='LimJiaYu' & age>25)
 []         filter(df, first_name=='LimJiaYu' | age>25)
 []         filter(df, !(first_name=='LimJiaYu'))
+[]
+[]    Df = subset(df, subset_expression, select_expression, drop=T/F(def) )
+[]        df1 = subset(df, Ozone>30&Wind>10, Solar.R, drop=TRUE)
+[]        [1] 307  92 252 291 323 284 314 274 220  82 229 192 244 190  92 236 139
+[]            Above simply means in df, select any values in column 'Solar.R' that has its 'Ozone & Wind'
+[]            value of the same row fulfilling the condition 'Ozone>30&Wind>10'.
+[]            drop=FALSE (returned in col form [i,j])
+[]            drop=TRUE  (returned in row form)
+[]
+[]    Df = split(X, split_key)
+[]        df2 = split(df, df$name)     <-- split based on name, df2 contains multiple df with same names.
+[]
+[]    Df = df[complete.cases(df), ]    <-- removing incomplete rows from df, full ref: tag_NA
+[]    Df = df[-c(1,2,3), ]             <-- removing rows 1,2,3
+[]
 []    Df = arrange(df, col_name)                           <-- returns new df arr asc according to col_name
 []         arrange(df, desc(col_name))                     <-- returns new df arr desc according to col_name
-[]    Df = mutate(df, NewCol1=Val/Exp, NewCol2=Val/Exp, ..)       <-- retuns a new df with added col & values evaluated
+[]
+[]    Df = merge(df1, df2, by='SameColName')               <-- returns a new df with df1 df2 merged by the SameColName
+[]                                                             *SameColName must be available and same in both df
+[]
+[]    Df = mutate(df, NewCol1=Val/Exp, NewCol2=Val/Exp, ..)       <-- returns a new df with added col & values evaluated
 []         dogs = dogs %>%
 []           mutate(avg_height = ((height_low_inches+height_high_inches)/2))
+[]
 []    Df = transmute(df, NewCol1=Val/Exp,.. , OldCol=OldCol)      <-- returns a new df with ONLY the specified cols
+[]
 []    Df = rename(df, newcolname1=oldname1, newcolname2=oldname2, ..)   <-- returns a new df with renamed columns
+[]
 []    Vc = names(df)       <-- returns a vector containing all col names of df
 []    Vc = colnames(df)    <-/
+[]
+[]    Tb = count(df, colname)   <-- returns a table with counts of the unique values in the named column.
+[]
+[]    Vc = duplicated(df)    <-- returns a logical vector telling us which rows are duplicate rows (TRUE).
+[]
+[]    Df = distinct(df)      <-- returns a new df with duplicate rows removed.
+[]         distinct(df, colName, .keep_all=TRUE)   <-- returns a new Df with duplicated rows (based on colName) removed.
+
 
 #======== Read from Multiple Files
 []    Vc <- list.files(pattern = "file_.*csv")
@@ -136,3 +970,35 @@ that should be matched, to find any file in the current directory that starts wi
 of csv, storing the name of each file in a vector files.
 The second line uses lapply() to read each file in files into a data frame with read_csv(), storing the data frames in df_list
 The third line then concatenates all of those data frames together with dplyr’s bind_rows() function
+
+
+============================================================================================================================================ ~!tidyr
+A library used to tidy up data frames.
+
+We would want to reshape a table like:
+
+    Account   Checking Savings
+    --------------------------
+    “12456543”  8500   8900
+    “12283942”  6410   8020
+    “12839485”  78000  92000
+
+Into a table that looks more like:
+
+    Account    Account Type Amount        key   value
+    ------------------------------      --------------
+    “12456543”  “Checking”  8500            |   / .
+    “12456543”  “Savings”   8900            |  / ..
+    “12283942”  “Checking”  6410            | /  ..
+    “12283942”  “Savings”   8020            |/   |
+    “12839485”  “Checking”  78000           <    +->
+    “12839485”  “Savings”   920000
+
+We can use tidyr’s gather() function to do this transformation. gather() takes a data frame and the columns to unpack:
+
+[]    Df = gather(df, 'Checking','Savings',key='Account Type',value='Amount')
+
+    df: the data frame you want to gather, which can be piped into gather()
+    'Checking' and 'Savings' : the columns of the old data frame that you want to turn into variables
+    key: what to call the column of the new data frame that stores the variables
+    value: what to call the column of the new data frame that stores the values
